@@ -53,4 +53,17 @@ fs.appendFile(filepath, "\nThis is appended data.", "utf-8",
             console.log(`Data appended to file ${filename} successfully.`);
         }
     }
-)
+);
+
+// 4. fs.unlink() method is used to delete a file asynchronously. If the file does not exist, it will
+// throw an error.
+
+// Syntax: fs.unlink(path, callback)
+
+fs.unlink(filepath, (err) => {
+    if (err) 
+        console.error(err);
+    else{
+        console.log(`File ${filename} deleted successfully.`);
+    }
+});

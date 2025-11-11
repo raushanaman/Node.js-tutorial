@@ -38,4 +38,19 @@ fs.readFile(filepath, "utf-8", (err, data) => {
     else{
         console.log(data);
     }
-})
+});
+
+//3. fs.appendfile() method is used to append data to a file asynchronously. If the file does not exist,
+// it will be created.
+
+// Syntax: fs.appendfile(path, data, options, callback)
+
+fs.appendFile(filepath, "\nThis is appended data.", "utf-8",
+    (err) => {
+        if(err)
+            console.error(err);
+        else{
+            console.log(`Data appended to file ${filename} successfully.`);
+        }
+    }
+)

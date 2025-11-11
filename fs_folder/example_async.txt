@@ -1,2 +1,0 @@
-hello this is an example of asynchronous fs module
-This is appended data.

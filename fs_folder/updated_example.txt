@@ -1,0 +1,3 @@
+hello this is example of fs module
+ this is appended data
+ this is appended data

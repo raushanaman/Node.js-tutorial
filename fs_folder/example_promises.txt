@@ -1,0 +1,2 @@
+This is an example file for promisesfs.js
+It ensures fs.promises.readFile has a file to read.

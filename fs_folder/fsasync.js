@@ -60,10 +60,10 @@ fs.appendFile(filepath, "\nThis is appended data.", "utf-8",
 
 // Syntax: fs.unlink(path, callback)
 
-fs.unlink(filepath, (err) => {
-    if (err) 
-        console.error(err);
-    else{
-        console.log(`File ${filename} deleted successfully.`);
-    }
-});
+// fs.unlink(filepath, (err) => {
+//     if (err) 
+//         console.error(err);
+//     else{
+//         console.log(`File ${filename} deleted successfully.`);
+//     }
+// });

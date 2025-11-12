@@ -37,8 +37,45 @@ const path = require ("path");
 const filename2 = "pksEx.txt";
 const filepath = path.join(__dirname, filename2);
 
-fs.promises.writeFile(filepath,"this is initial data","utf-8")
-.then(console.log("file created successfully"))
+// fs.promises.writeFile(filepath,"this is initial data","utf-8")
+// .then(console.log("file created successfully"))
+// .catch((err)=>{
+//     console.error(err);
+// });
+
+// Read a file: ReadFile()
+// The readFile() method reads data from the file.
+// Syntax: fs.promises.readFile(filepath,options).then(data).catch()
+
+fs.promises.readFile(filepath,"utf-8")
+.then((data) => {
+    console.log(data)
+})
+.catch((err) => {
+    console.error(err)
+});
+
+// ******************************* updata ********************************
+
+// updata (append content to a file): appendfile()
+// Add content at the end of the file
+// the appendfile() method append without overwriting the existing data
+
+// Syntax: fs.promises.appendFile(filepath,data, options).then().catch()
+
+// fs.promises.appendFile(filepath,"\nThis is the updated data", "utf-8")
+// .then((data)=>{
+//     console.log("data appended successfully");
+// })
+// .catch((err)=>{
+//     console.error(err);
+// })
+
+// Delete: Unlink() method is used to remove the specified file asynchronously.
+// Syntax: fs.promises.unlink(filepath).then().catch()
+
+fs.promises.unlink(filepath)
+.then(console.log("file remove successfully"))
 .catch((err)=>{
     console.error(err);
 })

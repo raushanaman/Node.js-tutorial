@@ -55,7 +55,7 @@ fs.promises.readFile(filepath,"utf-8")
     console.error(err)
 });
 
-// ******************************* updata ********************************
+// ******************************* update ********************************
 
 // updata (append content to a file): appendfile()
 // Add content at the end of the file

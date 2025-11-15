@@ -6,7 +6,7 @@ const http = require("http");
 const server = http.createServer((req, res) =>{
     if(req.url === "/")
     {
-        res.write("Hello i am aman raushan");
+        res.write("Hello i am aman raushan and this is node js tutorial");
         res.end();
     }
 

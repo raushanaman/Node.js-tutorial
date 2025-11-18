@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/raushanaman/Node.js-tutorial#readme",
   "dependencies": {
+    "chalk": "^5.6.2",
     "express": "^5.1.0",
     "nodemon": "^3.1.11"
   }

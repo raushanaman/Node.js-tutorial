@@ -1,5 +1,5 @@
 {
-  "name": "node-js",
+  "name": "js",
   "version": "1.0.0",
   "description": "Node js tutorial",
   "main": "app.js",
@@ -25,5 +25,6 @@
     "chalk": "^5.6.2",
     "express": "^5.1.0",
     "nodemon": "^3.1.11"
-  }
+  },
+  "devDependencies": {}
 }

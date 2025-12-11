@@ -12,7 +12,8 @@ import express from "express";
    return res.send("hello about page");
  });
 
- const port = 3000;
+ //const port = 3000;
+ const port = process.env.PORT||3000; // here i defined port number in powershell
  app.listen(port, ()=>{
     console.log(`server is running at port:${port}`);
  })

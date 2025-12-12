@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 URL Shortener</h1>
+        
+        <div class="input-group">
+            <input type="url" id="urlInput" placeholder="Enter your long URL here...">
+        </div>
+        
+        <button onclick="shortenUrl()">✨ Shorten URL</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function shortenUrl() {
+            const url = document.getElementById('urlInput').value;
+            if (!url) return alert('Please enter a URL!');
+            
+            const response = await fetch('/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+            });
+            
+            const data = await response.json();
+            document.getElementById('result').innerHTML = 
+                `<strong>🎉 Your Short URL:</strong><br>
+                <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>
+                <br><button class="copy-btn" onclick="copyUrl('${data.shortUrl}')">📋 Copy</button>`;
+            
+            document.getElementById('urlInput').value = '';
+        }
+        
+        function copyUrl(url) {
+            navigator.clipboard.writeText(url);
+            alert('✅ Copied to clipboard!');
+        }
+    </script>
+</body>
+</html>

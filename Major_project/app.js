@@ -1,100 +1,48 @@
-import { readFile } from "fs/promises";
-import {createServer} from "http";
-import path from "path";
-import crypto from "crypto";
-import { text } from "stream/consumers";
-import { writeFile } from "fs";
+import express from 'express';
+import crypto from 'crypto';
+import fs from 'fs/promises';
 
-const PORT = 3002;
+const app = express();
+const PORT = 3000;
+const DATA_FILE = 'links.json';
 
-const Data_File = path.join("data", "links.json")
+app.use(express.json());
+app.use(express.static('public'));
 
-// this function is only used for re -use the code
-
-
-const serveFile = async (res, filepath , contentType) => {
-    try{
-            const data = await readFile(filepath);
-            res.writeHead(200, {"Content-Type": contentType });
-            res.end(data);
-    }catch (error)
-    {
-        res.writeHead(404, {"Content-type": contentType});
-        res.end("404 Page not found");
+const loadLinks = async () => {
+    try {
+        const data = await fs.readFile(DATA_FILE, 'utf-8');
+        return JSON.parse(data);
+    } catch {
+        await fs.writeFile(DATA_FILE, '{}');
+        return {};
     }
-
 };
 
-const loadDisk = async() =>{
-    try{
-        const data = await readFile(Data_File, 'utf-8');
-        return JSON.parse(data);
-    }catch(error){
-        if(error.code === "ENOENT"){
-            await writeFile(Data_File, JSON.stringify({
+const saveLinks = async (links) => {
+    await fs.writeFile(DATA_FILE, JSON.stringify(links, null, 2));
+};
 
-            }));
-            return {};
-        }throw error;
-
-    }
-}
-
-const server = createServer (async (req, res)=>{
-    if(req.method === "GET"){
-        if(req.url === "/")
-        {
-            return serveFile(res, path.join("public", "index.html"), "text/html");
-        }
-    //     try{
-    //         const data = await readFile(path.join("public", "index.html"));
-    //         res.writeHead(200, {"Content-Type": "text/html" });
-    //         res.end(data);
-    // }catch (error)
-    // {
-    //     res.writeHead(404, {"Content-type": "text/html"});
-    //     res.end("404 Page not found");
-    // }
-    // }
-    // below is used in case of while  you write css in a seperate css file.
-
-
-    }else if(req.method === "GET"){
-         if(req.url === "/style.css")
-         {
-            return serveFile(res, path.join("public", "style.css"), "text/css");
-         }
-    //     try{
-    //         const data = await readFile(path.join("public", "style.css"));
-    //         res.writeHead(200, {"Content-Type": "text/css" });
-    //         res.end(data);
-    // }catch (error)
-    // {
-    //     res.writeHead(404, {"Content-type": "text/html"});
-    //     res.end("404 Page not found");
-    // }
-        
-    }
-    if(req.method === "POST" && req.url === "/shorten"){
-
-        const links = await loadDisk();
-
-        let body = "";
-        req.on("data", (chunk) =>{
-            body += chunk;
-        });
-        req.on("end", ()=>{
-            console.log("Received body:", body);
-            const { url, shortCode} = JSON.parse(body);
-            if(!url){
-                res.writeHead(400, {"content-type": "text/plain"});
-                return res.end("URL is required");
-            }
-            const finalShortCode = shortCode || crypto.randomBytes(4).toString("hex");
-        });
-    }
+app.post('/shorten', async (req, res) => {
+    const { url } = req.body;
+    if (!url) return res.status(400).json({ error: 'URL required' });
+    
+    const links = await loadLinks();
+    const shortCode = crypto.randomBytes(3).toString('hex');
+    links[shortCode] = { url, clicks: 0 };
+    await saveLinks(links);
+    
+    res.json({ shortCode, shortUrl: `http://localhost:${PORT}/${shortCode}` });
 });
 
-server.listen(PORT, () =>{
-    console.log(`Server running at http://localhost:${PORT}`);
+app.get('/:shortCode', async (req, res) => {
+    const links = await loadLinks();
+    const link = links[req.params.shortCode];
+    if (!link) return res.status(404).send('Not found');
+    
+    link.clicks++;
+    await saveLinks(links);
+    res.redirect(link.url);
 });
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
